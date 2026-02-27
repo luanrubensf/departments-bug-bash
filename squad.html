@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Bash Squad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-green: #39FF14;
+            --neon-pink: #FF10F0;
+            --neon-cyan: #00F0FF;
+            --neon-yellow: #FFF000;
+            --deep-purple: #1a0a2e;
+            --dark-purple: #2d1b4e;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: linear-gradient(135deg, var(--deep-purple) 0%, var(--dark-purple) 100%);
+            min-height: 100vh;
+            padding: 3rem 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated grid background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: perspective(500px) rotateX(60deg) translateY(0);
+            }
+            100% {
+                transform: perspective(500px) rotateX(60deg) translateY(50px);
+            }
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-button {
+            display: inline-block;
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(0, 240, 255, 0.1);
+        }
+
+        .back-button:hover {
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            transform: translateX(-5px);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--neon-pink);
+            color: var(--deep-purple);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(255, 16, 240, 0.6);
+        }
+
+        h1 {
+            font-family: 'Dela Gothic One', cursive;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            color: var(--neon-green);
+            text-shadow: 
+                0 0 10px var(--neon-green),
+                0 0 20px var(--neon-green),
+                0 0 40px var(--neon-green);
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+            letter-spacing: 1px;
+        }
+
+        .squad-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .squad-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out backwards;
+        }
+
+        .squad-card:nth-child(1) { animation-delay: 0.1s; }
+        .squad-card:nth-child(2) { animation-delay: 0.2s; }
+        .squad-card:nth-child(3) { animation-delay: 0.3s; }
+        .squad-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .squad-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .squad-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .squad-card:hover::before {
+            opacity: 1;
+        }
+
+        .squad-card:nth-child(1) { border-color: var(--neon-cyan); }
+        .squad-card:nth-child(2) { border-color: var(--neon-pink); }
+        .squad-card:nth-child(3) { border-color: var(--neon-green); }
+        .squad-card:nth-child(4) { border-color: var(--neon-yellow); }
+
+        .squad-card:nth-child(1):hover { box-shadow: 0 20px 60px rgba(0, 240, 255, 0.4); }
+        .squad-card:nth-child(2):hover { box-shadow: 0 20px 60px rgba(255, 16, 240, 0.4); }
+        .squad-card:nth-child(3):hover { box-shadow: 0 20px 60px rgba(57, 255, 20, 0.4); }
+        .squad-card:nth-child(4):hover { box-shadow: 0 20px 60px rgba(255, 240, 0, 0.4); }
+
+        .avatar-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .avatar-ring {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, var(--ring-color), transparent);
+            animation: rotate 3s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .squad-card:nth-child(1) .avatar-ring { --ring-color: var(--neon-cyan); }
+        .squad-card:nth-child(2) .avatar-ring { --ring-color: var(--neon-pink); }
+        .squad-card:nth-child(3) .avatar-ring { --ring-color: var(--neon-green); }
+        .squad-card:nth-child(4) .avatar-ring { --ring-color: var(--neon-yellow); }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--avatar-color-1), var(--avatar-color-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            z-index: 2;
+            border: 4px solid var(--deep-purple);
+        }
+
+        .squad-card:nth-child(1) .avatar {
+            --avatar-color-1: #00F0FF;
+            --avatar-color-2: #0080FF;
+        }
+
+        .squad-card:nth-child(2) .avatar {
+            --avatar-color-1: #FF10F0;
+            --avatar-color-2: #FF1080;
+        }
+
+        .squad-card:nth-child(3) .avatar {
+            --avatar-color-1: #39FF14;
+            --avatar-color-2: #20C000;
+        }
+
+        .squad-card:nth-child(4) .avatar {
+            --avatar-color-1: #FFF000;
+            --avatar-color-2: #FFB000;
+        }
+
+        .member-name {
+            font-family: 'Dela Gothic One', cursive;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .member-role {
+            text-align: center;
+            color: var(--role-color);
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px var(--role-color);
+        }
+
+        .squad-card:nth-child(1) .member-role { --role-color: var(--neon-cyan); }
+        .squad-card:nth-child(2) .member-role { --role-color: var(--neon-pink); }
+        .squad-card:nth-child(3) .member-role { --role-color: var(--neon-green); }
+        .squad-card:nth-child(4) .member-role { --role-color: var(--neon-yellow); }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--role-color), transparent);
+            margin: 1.5rem 0;
+        }
+
+        .superpowers {
+            text-align: left;
+        }
+
+        .superpowers-title {
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .power-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .power-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .power-icon {
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .squad-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <a href="departments-bug-bash-cover.html" class="back-button">← Back to Mission</a>
+
+        <header>
+            <div class="badge">👥 Meet The Team</div>
+            <h1>BUG BASH SQUAD</h1>
+            <div class="subtitle">Elite Bug Hunters Ready for Action</div>
+        </header>
+
+        <div class="squad-grid">
+            <!-- Luan -->
+            <div class="squad-card">
+                <div class="avatar-container">
+                    <div class="avatar-ring"></div>
+                    <div class="avatar">🚀</div>
+                </div>
+                <h2 class="member-name">Luan</h2>
+                <div class="member-role">Tech Lead</div>
+                <div class="divider"></div>
+                <div class="superpowers">
+                    <div class="superpowers-title">⚡ Superpowers</div>
+                    <div class="power-item">
+                        <span class="power-icon">🔍</span>
+                        <span>Edge Case Detective</span>
+                    </div>
+                    <div class="power-item">
+                        <span class="power-icon">🏗️</span>
+                        <span>Architecture Architect</span>
+                    </div>
+                    <div class="power-item">
+                        <span class="power-icon">⚙️</span>
+                        <span>System Optimization Guru</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- João -->
+            <div class="squad-card">
+                <div class="avatar-container">
+                    <div class="avatar-ring"></div>
+                    <div class="avatar">💻</div>
+                </div>
+                <h2 class="member-name">João</h2>
+                <div class="member-role">Full Stack Dev</div>
+                <div class="divider"></div>
+                <div class="superpowers">
+                    <div class="superpowers-title">⚡ Superpowers</div>
+                    <div class="power-item">
+                        <span class="power-icon">🐛</span>
+                        <span>Bug Whisperer</span>
+                    </div>
+                    <div class="power-item">
+                        <span class="power-icon">🎨</span>
+                        <span>UI/UX Perfectionist</span>
+                    </div>
+                    <div class="power-item">
+                        <span class="power-icon">🔥</span>
+                        <span>Performance Optimizer</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rafael -->
+            <div class="squad-card">
+                <div class="avatar-container">
+                    <div class="avatar-ring"></div>
+                    <div class="avatar">⚡</div>
+                </div>
+                <h2 class="member-name">Rafael</h2>
+                <div class="member-role">Backend Wizard</div>
+                <div class="divider"></div>
+                <div class="superpowers">
+                    <div class="superpowers-title">⚡ Superpowers</div>
+                    <div class="power-item">
+                        <span class="power-icon">🗄️</span>
+                        <span>Database Mastermind</span>
+                    </div>
+                    <div class="power-item">
+                        <span class="power-icon">🔐</span>
+                        <span>Security Sentinel</span>
+                    </div>
+                    <div class="power-item">
+                        <span class="power-icon">⚙️</span>
+                        <span>API Craftsman</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rocky -->
+            <div class="squad-card">
+                <div class="avatar-container">
+                    <div class="avatar-ring"></div>
+                    <div class="avatar">🎯</div>
+                </div>
+                <h2 class="member-name">Rocky</h2>
+                <div class="member-role">QA Champion</div>
+                <div class="divider"></div>
+                <div class="superpowers">
+                    <div class="superpowers-title">⚡ Superpowers</div>
+                    <div class="power-item">
+                        <span class="power-icon">🎪</span>
+                        <span>Chaos Engineering Master</span>
+                    </div>
+                    <div class="power-item">
+                        <span class="power-icon">🧪</span>
+                        <span>Test Coverage Zealot</span>
+                    </div>
+                    <div class="power-item">
+                        <span class="power-icon">🎲</span>
+                        <span>Random Bug Generator</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add sparkle effect on hover
+        const cards = document.querySelectorAll('.squad-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                // Add extra glow effect
+                this.style.transition = 'all 0.4s ease';
+            });
+        });
+
+        // Parallax effect for avatar rings on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const rings = document.querySelectorAll('.avatar-ring');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            rings.forEach((ring, index) => {
+                const speed = (index + 1) * 0.5;
+                const x = (mouseX - 0.5) * speed * 10;
+                const y = (mouseY - 0.5) * speed * 10;
+                ring.style.transform = `translate(${x}px, ${y}px) rotate(${index * 90}deg)`;
+            });
+        });
+    </script>
+</body>
+</html>
