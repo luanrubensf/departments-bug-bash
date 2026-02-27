@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Bash Instructions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-green: #39FF14;
+            --neon-pink: #FF10F0;
+            --neon-cyan: #00F0FF;
+            --neon-yellow: #FFF000;
+            --deep-purple: #1a0a2e;
+            --dark-purple: #2d1b4e;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: linear-gradient(135deg, var(--deep-purple) 0%, var(--dark-purple) 100%);
+            min-height: 100vh;
+            padding: 3rem 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.3;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-button {
+            display: inline-block;
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(0, 240, 255, 0.1);
+        }
+
+        .back-button:hover {
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            transform: translateX(-5px);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--neon-pink);
+            color: var(--deep-purple);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(255, 16, 240, 0.6);
+        }
+
+        h1 {
+            font-family: 'Dela Gothic One', cursive;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            color: var(--neon-green);
+            text-shadow:
+                0 0 10px var(--neon-green),
+                0 0 20px var(--neon-green),
+                0 0 40px var(--neon-green);
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px var(--neon-yellow);
+            letter-spacing: 1px;
+        }
+
+        .link-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .link-pill {
+            display: inline-block;
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.5rem 1.25rem;
+            border: 1px solid var(--neon-cyan);
+            border-radius: 25px;
+            background: rgba(0, 240, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .link-pill:hover {
+            background: rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: slideUp 0.6s ease-out backwards;
+        }
+
+        .section:nth-child(1) { animation-delay: 0.1s; border: 2px solid var(--neon-cyan); }
+        .section:nth-child(2) { animation-delay: 0.2s; border: 2px solid var(--neon-pink); }
+        .section:nth-child(3) { animation-delay: 0.3s; border: 2px solid var(--neon-green); }
+        .section:nth-child(4) { animation-delay: 0.4s; border: 2px solid var(--neon-yellow); }
+        .section:nth-child(5) { animation-delay: 0.5s; border: 2px solid var(--neon-pink); }
+        .section:nth-child(6) { animation-delay: 0.6s; border: 2px solid var(--neon-cyan); }
+        .section:nth-child(7) { animation-delay: 0.7s; border: 2px solid var(--neon-green); }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-icon { font-size: 2rem; }
+
+        .section-title {
+            font-family: 'Dela Gothic One', cursive;
+            font-size: 1.5rem;
+        }
+
+        .section:nth-child(1) .section-title { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+        .section:nth-child(2) .section-title { color: var(--neon-pink); text-shadow: 0 0 10px var(--neon-pink); }
+        .section:nth-child(3) .section-title { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
+        .section:nth-child(4) .section-title { color: var(--neon-yellow); text-shadow: 0 0 10px var(--neon-yellow); }
+        .section:nth-child(5) .section-title { color: var(--neon-pink); text-shadow: 0 0 10px var(--neon-pink); }
+        .section:nth-child(6) .section-title { color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan); }
+        .section:nth-child(7) .section-title { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
+
+        .step-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .step-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .step-list li:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .step-num {
+            font-family: 'Dela Gothic One', cursive;
+            font-size: 1.1rem;
+            min-width: 2rem;
+            color: var(--neon-yellow);
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .tag {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .known-issue-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .known-issue-list li {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 16, 240, 0.05);
+            border-left: 3px solid var(--neon-pink);
+            border-radius: 0 10px 10px 0;
+        }
+
+        .known-issue-list li strong {
+            color: var(--neon-pink);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .facilities-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .facilities-table th {
+            color: var(--neon-cyan);
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 2px solid rgba(0, 240, 255, 0.3);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .facilities-table td {
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .facilities-table tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .facilities-table td:first-child {
+            color: var(--neon-yellow);
+            font-weight: 700;
+        }
+
+        .report-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .report-btn {
+            flex: 1;
+            min-width: 200px;
+            display: block;
+            text-align: center;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .report-btn.bugs {
+            background: rgba(255, 16, 240, 0.15);
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+        }
+
+        .report-btn.bugs:hover {
+            background: rgba(255, 16, 240, 0.3);
+            box-shadow: 0 0 20px rgba(255, 16, 240, 0.4);
+        }
+
+        .report-btn.improvements {
+            background: rgba(57, 255, 20, 0.15);
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        .report-btn.improvements:hover {
+            background: rgba(57, 255, 20, 0.3);
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 3rem;
+            animation: fadeIn 0.8s ease-out 0.5s both;
+        }
+
+        .cta-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
+            color: white;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 16, 240, 0.4);
+        }
+
+        .cta-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 16, 240, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .section { padding: 1.5rem; }
+            .report-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+    <div class="scanlines"></div>
+
+    <div class="container">
+        <a href="index.html" class="back-button">← Back to Home</a>
+
+        <header>
+            <div class="badge">📋 Mission Briefing</div>
+            <h1>INSTRUCTIONS</h1>
+            <div class="subtitle">Validate the Departments project end-to-end.</div>
+            <div class="link-row">
+                <a href="https://www.figma.com/design/CzSICO5jB4mp33u11qz5bo/Departments?node-id=6472-81887&p=f&m=dev" target="_blank" class="link-pill">🎨 Figma</a>
+                <a href="https://www.notion.so/TDD-Departments-25eee706d90b8010b31ecd01b77fc5bf" target="_blank" class="link-pill">📄 TDD</a>
+                <a href="https://dev.sandbox.maple.com" target="_blank" class="link-pill">🌐 dev.sandbox.maple.com</a>
+                <a href="https://docs.google.com/document/d/1AR6nmYugKqk9EJLPabF6-uxJiijNERn6K0QBJt9E9Ds/edit?tab=t.0" target="_blank" class="link-pill">📋 Official Doc</a>
+            </div>
+        </header>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🏗️</span>
+                <span class="section-title">How It Works</span>
+            </div>
+            <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.25rem;">
+                A facility can now have multiple departments. Each department has its own isolated set of settings:
+            </p>
+            <div class="tag-list">
+                <span class="tag">Positions &amp; Qualifications</span>
+                <span class="tag">Time Bins &amp; Timeslot Presets</span>
+                <span class="tag">Schedule Configuration</span>
+                <span class="tag">Staffing Targets</span>
+                <span class="tag">Schedule &amp; Master Schedule</span>
+            </div>
+            <p style="color: rgba(255,255,255,0.65); font-size: 0.875rem; line-height: 1.6; margin-top: 1.25rem;">
+                When a new department is created, default time bins and schedule configuration are generated automatically. Everything else must be set up by users or Maple admins.
+            </p>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🧪</span>
+                <span class="section-title">How to Test</span>
+            </div>
+            <ul class="step-list">
+                <li>
+                    <span class="step-num">01</span>
+                    <span>The feature flag is already enabled for the entire dev environment — no action needed to enable it.</span>
+                </li>
+                <li>
+                    <span class="step-num">02</span>
+                    <span>Set up departments for your facility using a facility or Maple admin. Navigate to <strong>Settings &gt; Departments</strong>.</span>
+                </li>
+                <li>
+                    <span class="step-num">03</span>
+                    <span>Configure the department: create <strong>positions, qualifications, timeslots</strong>, etc. (same flow as setting up a new facility).</span>
+                </li>
+                <li>
+                    <span class="step-num">04</span>
+                    <span>For units, a single unit can be linked to multiple departments. Access the unit page as a <strong>Maple admin</strong> to link it.</span>
+                </li>
+                <li>
+                    <span class="step-num">05</span>
+                    <span>To create a <strong>Department Admin</strong>: go to the Roster, add a new employee, select the "Department Admin" role, and link them to departments.</span>
+                </li>
+                <li>
+                    <span class="step-num">06</span>
+                    <span>Employee–department links are driven by <strong>active qualifications</strong>. Workers with qualifications across departments are visible to all relevant departments.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🐛</span>
+                <span class="section-title">How to Report</span>
+            </div>
+            <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                Use the spreadsheet below. It has two tabs — make sure you're filing in the right one.
+            </p>
+            <div class="report-buttons">
+                <a href="https://docs.google.com/spreadsheets/d/17S0GifPWspsPHug0xwF6KttprxhUFKnmoSADPUxuth0/edit?gid=0#gid=0" target="_blank" class="report-btn bugs">🐛 Bugs Tab</a>
+                <a href="https://docs.google.com/spreadsheets/d/17S0GifPWspsPHug0xwF6KttprxhUFKnmoSADPUxuth0/edit?gid=376922600#gid=376922600" target="_blank" class="report-btn improvements">✨ UI/UX &amp; Improvements Tab</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">⚠️</span>
+                <span class="section-title">Known Issues</span>
+            </div>
+            <ul class="known-issue-list">
+                <li>
+                    <strong>Notify Employees</strong>
+                    Not adapted for multiple departments yet. You'll see the same behavior as before.
+                </li>
+                <li>
+                    <strong>Dashboard</strong>
+                    No department-specific view. Department admins see the facility dashboard as usual.
+                </li>
+                <li>
+                    <strong>Shift Remap Tool</strong>
+                    Department support not yet implemented — a PR exists in a separate branch.
+                </li>
+                <li>
+                    <strong>Department Configuration</strong>
+                    No UI yet. The only available option is "hide census" — update via DB or ask the team.
+                </li>
+                <li>
+                    <strong>Archive Department</strong>
+                    No side effects handled. Archiving a department keeps all linked data active.
+                </li>
+                <li>
+                    <strong>Audit</strong>
+                    Department filter on the Audit page is not ready for the bash — will be done before release.
+                </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <span class="section-icon">🎲</span>
+                <span class="section-title">Overall Instructions</span>
+            </div>
+            <ul class="step-list">
+                <li>
+                    <span class="step-num">01</span>
+                    <span>If something is wrong, it's João's fault.</span>
+                </li>
+                <li>
+                    <span class="step-num">02</span>
+                    <span>If you say "departments" three times, a new department selector will appear on the screen.</span>
+                </li>
+                <li>
+                    <span class="step-num">03</span>
+                    <span>If you reproduce a bug with your eyes closed, you will never see it happen again.</span>
+                </li>
+                <li>
+                    <span class="step-num">04</span>
+                    <span>If you find a bug no one else can reproduce, congratulations — it's yours now. Please name it.</span>
+                </li>
+                <li>
+                    <span class="step-num">05</span>
+                    <span>If the feature works perfectly on your machine, clear your cache and try again.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="cta-section">
+            <a href="https://dev.sandbox.maple.com/" target="_blank" class="cta-link">Open Environment 🚀</a>
+        </div>
+    </div>
+</body>
+</html>
