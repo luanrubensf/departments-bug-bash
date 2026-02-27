@@ -246,34 +246,11 @@
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--avatar-color-1), var(--avatar-color-2));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
+            object-fit: cover;
+            display: block;
             position: relative;
             z-index: 2;
             border: 4px solid var(--deep-purple);
-        }
-
-        .squad-card:nth-child(1) .avatar {
-            --avatar-color-1: #00F0FF;
-            --avatar-color-2: #0080FF;
-        }
-
-        .squad-card:nth-child(2) .avatar {
-            --avatar-color-1: #FF10F0;
-            --avatar-color-2: #FF1080;
-        }
-
-        .squad-card:nth-child(3) .avatar {
-            --avatar-color-1: #39FF14;
-            --avatar-color-2: #20C000;
-        }
-
-        .squad-card:nth-child(4) .avatar {
-            --avatar-color-1: #FFF000;
-            --avatar-color-2: #FFB000;
         }
 
         .member-name {
@@ -307,42 +284,13 @@
             margin: 1.5rem 0;
         }
 
-        .superpowers {
-            text-align: left;
-        }
-
-        .superpowers-title {
-            color: white;
-            font-weight: 700;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .power-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.95rem;
-            padding: 0.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .power-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .power-icon {
-            font-size: 1.3rem;
+        .quote {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            font-style: italic;
+            line-height: 1.6;
+            padding: 0.5rem 0.25rem;
         }
 
         @media (max-width: 768px) {
@@ -366,117 +314,61 @@
     <div class="scanlines"></div>
 
     <div class="container">
-        <a href="departments-bug-bash-cover.html" class="back-button">← Back to Mission</a>
+        <a href="https://luanrubensf.github.io/departments-bug-bash" class="back-button">← Back to Mission</a>
 
         <header>
             <div class="badge">👥 Meet The Team</div>
-            <h1>BUG BASH SQUAD</h1>
-            <div class="subtitle">Elite Bug Hunters Ready for Action</div>
+            <h1>DEPARTMENT SQUAD</h1>
+            <div class="subtitle">They Built It. Now They'll Break It.</div>
         </header>
 
         <div class="squad-grid">
+            <!-- Rocky -->
+            <div class="squad-card">
+                <div class="avatar-container">
+                    <div class="avatar-ring"></div>
+                    <img class="avatar" src="img/rocky.png" alt="Rocky">
+                </div>
+                <h2 class="member-name">Rocky</h2>
+                <div class="member-role">Pixel Sorceress</div>
+                <div class="divider"></div>
+                <div class="quote">"Can we squeeze in these changes together?."</div>
+            </div>
+
             <!-- Luan -->
             <div class="squad-card">
                 <div class="avatar-container">
                     <div class="avatar-ring"></div>
-                    <div class="avatar">🚀</div>
+                    <img class="avatar" src="img/luan.jpg" alt="Luan">
                 </div>
                 <h2 class="member-name">Luan</h2>
-                <div class="member-role">Tech Lead</div>
+                <div class="member-role">Backend Overlord</div>
                 <div class="divider"></div>
-                <div class="superpowers">
-                    <div class="superpowers-title">⚡ Superpowers</div>
-                    <div class="power-item">
-                        <span class="power-icon">🔍</span>
-                        <span>Edge Case Detective</span>
-                    </div>
-                    <div class="power-item">
-                        <span class="power-icon">🏗️</span>
-                        <span>Architecture Architect</span>
-                    </div>
-                    <div class="power-item">
-                        <span class="power-icon">⚙️</span>
-                        <span>System Optimization Guru</span>
-                    </div>
-                </div>
+                <div class="quote">"If it looks broken, it probably is, but it could always be worse."</div>
             </div>
 
             <!-- João -->
             <div class="squad-card">
                 <div class="avatar-container">
                     <div class="avatar-ring"></div>
-                    <div class="avatar">💻</div>
+                    <img class="avatar" src="img/joao.jpg" alt="João">
                 </div>
                 <h2 class="member-name">João</h2>
-                <div class="member-role">Full Stack Dev</div>
+                <div class="member-role">FE Master</div>
                 <div class="divider"></div>
-                <div class="superpowers">
-                    <div class="superpowers-title">⚡ Superpowers</div>
-                    <div class="power-item">
-                        <span class="power-icon">🐛</span>
-                        <span>Bug Whisperer</span>
-                    </div>
-                    <div class="power-item">
-                        <span class="power-icon">🎨</span>
-                        <span>UI/UX Perfectionist</span>
-                    </div>
-                    <div class="power-item">
-                        <span class="power-icon">🔥</span>
-                        <span>Performance Optimizer</span>
-                    </div>
-                </div>
+                <div class="quote">"I'm gonna need a vacation after this."</div>
             </div>
 
             <!-- Rafael -->
             <div class="squad-card">
                 <div class="avatar-container">
                     <div class="avatar-ring"></div>
-                    <div class="avatar">⚡</div>
+                    <img class="avatar" src="img/rafael.jpg" alt="Rafael">
                 </div>
                 <h2 class="member-name">Rafael</h2>
                 <div class="member-role">Backend Wizard</div>
                 <div class="divider"></div>
-                <div class="superpowers">
-                    <div class="superpowers-title">⚡ Superpowers</div>
-                    <div class="power-item">
-                        <span class="power-icon">🗄️</span>
-                        <span>Database Mastermind</span>
-                    </div>
-                    <div class="power-item">
-                        <span class="power-icon">🔐</span>
-                        <span>Security Sentinel</span>
-                    </div>
-                    <div class="power-item">
-                        <span class="power-icon">⚙️</span>
-                        <span>API Craftsman</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Rocky -->
-            <div class="squad-card">
-                <div class="avatar-container">
-                    <div class="avatar-ring"></div>
-                    <div class="avatar">🎯</div>
-                </div>
-                <h2 class="member-name">Rocky</h2>
-                <div class="member-role">QA Champion</div>
-                <div class="divider"></div>
-                <div class="superpowers">
-                    <div class="superpowers-title">⚡ Superpowers</div>
-                    <div class="power-item">
-                        <span class="power-icon">🎪</span>
-                        <span>Chaos Engineering Master</span>
-                    </div>
-                    <div class="power-item">
-                        <span class="power-icon">🧪</span>
-                        <span>Test Coverage Zealot</span>
-                    </div>
-                    <div class="power-item">
-                        <span class="power-icon">🎲</span>
-                        <span>Random Bug Generator</span>
-                    </div>
-                </div>
+                <div class="quote">"Should we block department admins from accessing this page?."</div>
             </div>
         </div>
     </div>
